@@ -145,13 +145,19 @@ var worker = (function () {
 --------------
 <h2> 2. 삼성전자 프로젝트</h2>
 
-     - 사용자관리, 로그인, 메뉴관리, 권한관리, Tenant관리, IP 권한관리, 세션관리, 세션 히스토리관리, 3rd party 관리, NE Group 관리 등 RestAPI 개발하였음.
-      - Exception 처리 나 log 등 다국어처리가 될 수 있도록 개발하였음.
-      - 로그인 사용자의 권한과 세션체크 경험이 있음.
+      - 사용자관리, 로그인, 메뉴관리, 권한관리, Tenant관리, IP 권한관리, 세션관리, 세션 히스토리관리, 3rd party 관리, NE Group 관리 등 RestAPI 개발하였음.
       
 <h3> 💻 개발 환경 </h3>
 
-      1. java 
-      2. Springboot
+      1. Vue ^2.6.14
+      2. Javascript
+
+1. 코드 공통화
+
+    UserInfo store로 생성하여 로그인 한 사용자가 localstorage로 정보를 갖고있을 수 있도록 설정
+   
+2. 이미지 등록 화면
+   <img width="1079" alt="image" src="https://github.com/user-attachments/assets/ecca7975-bc5f-42c1-93d4-43726166a158">
+
 
 
