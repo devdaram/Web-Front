@@ -1,14 +1,23 @@
 <h1>✨ 맡은 업무 설명</h1>
 <h2> 1. SKT 프로젝트 </h2>
       
-      - 유지보수성 개발을 주로 맡음
-      - 그 중 
+      [장비 토폴로지 등록]
+      - Web Front : 장비 토폴로지(Ring)등록 작업을 화면에 추가
+
+      [Package donwload]
+      - Web Front : Package download 시 필요한 Web Woker 개발
+      (Package가 대부분 용량이 크기 때문에 시간이 오래걸리는 작업으로, 별개의 Thread로 동작할 수 있도록 개발하였음.)
       
 <h3> 💻 개발 환경 </h3>
 
       1. javascript
       2. Aungular.js ~1.5.5
       3. jquery ~2.1.3
+
+<h4>1. 개발 했던 화면 일부 발췌</h4>
+<image src="https://github.com/user-attachments/assets/3e744fc6-e574-47f8-ad69-4db8b4be408f"/>
+
+<h4> 2. worker 모듈 코드 일부 수정 발췌</h4>
 
 ```javascript
 // webWorker 일부 수정 발췌
@@ -17,7 +26,6 @@ var worker = (function () {
     let workData; // global
 
     onmessage = function (e) {
-        console.log("#### In Worker ##### " + e.data);
         workData = e.data;
 
         if (workData.command == "start"){
@@ -26,13 +34,11 @@ var worker = (function () {
     }
 
     function startProgressData () {
-    console.log("#### In startProgressData #####");
         var rowData = workData.data;
         var interval = workData.interval;
         var path = workData.path;
 
-        postData(path , { 데이터 정보 })
-            .then(responseData => checkProcessStatus(responseData, interval))
+        postData(path , { 데이터 정보 }).then(responseData => checkProcessStatus(responseData, interval))
     }
 
     function checkProcessStatus(responseData, interval) {
@@ -42,10 +48,10 @@ var worker = (function () {
         try {
             var dataJson = JSON.parse(responseData);
         } catch (e) {
-            console.error("error", e, responseData);
             setTimeout(startProgressData, interval);
             return;
         }
+
         if (dataJson.uploadState == "SUCCESS") {
             postMessage({
                 "command": "success",
@@ -53,7 +59,6 @@ var worker = (function () {
             })
             self.close();
         } else {
-            console.log("#### In startProgressStatus - Checking #####");
             postMessage({
                 "command": "checking",
                 "data": dataJson
@@ -95,6 +100,7 @@ var worker = (function () {
     var autoRefreshFetch = function() {
         let originFetch = this;
         let args = arguments;
+
         return fetch.apply(originFetch, args).then(async function(data) {
             if (data.status === 401 || data.status === 403) {
                 var token = workData.session;
@@ -111,9 +117,7 @@ var worker = (function () {
                         return;
 
                     var refreshTokenData = await response.json();
-                    var token = {
-                        토큰 데이터
-                    };
+                    var token = {토큰 데이터};
 
                     self.postMessage({
                         "command": "refreshToken",
