@@ -152,11 +152,52 @@ var worker = (function () {
       1. Vue ^2.6.14
       2. Javascript
 
-1. 코드 공통화
+<h4>1. 코드 공통화</h4>
 
-    UserInfo store로 생성하여 로그인 한 사용자가 localstorage로 정보를 갖고있을 수 있도록 설정
+   - Store 방식을 활용하여 로그인 한 사용자 별로 localStorage를 사용할 수있도록 js파일 개발하였으며, 해당 방식을 템플릿화하여 다른 팀원이 사용할 수 있도록 작성
+   - Alert, Comfirm, Image view, Menu Titile 등 공통 컴포넌트 개발
+  
+    
+    아래코드는 Store 방식을 활용했던 코드의 일부를 수정 발췌했습니다
+     
+   ```javascript
+   
+    const store = new Vuex.Store({
+        //사용할 모듈을 나열합니다.
+        modules: {
+          userInfo: userInfo
+        },
+        plugins: [
+          // 여기에 쓴 모듈만 (새로고침해도) 저장됩니다.
+          createPersistedState({
+            paths: ["userInfo"]
+          }),
+          createMutationsSharer({
+            predicate: [
+              "userInfo/setSavedAccount", ....생략.....
+            ]
+          })
+        ]
+      });
+      
+      if (module.hot) {
+         //store를 활용할 URI를 아래와 같이 추가해 주세요
+        module.hot.accept(["./userInfo"], () => {
+          const userInfo = require("./userInfo").default;
+          store.hotUpdate({
+            modules: {
+              userInfo
+            }
+          });
+        });
+      }
+      
+      export default store;
+   ```
    
 2. 이미지 등록 화면
+   - 실제 개발했던 기능 중, 3rd party 관리 부분의 이미지 등록을 하는 화면캡쳐입니다.
+     
    <img width="1079" alt="image" src="https://github.com/user-attachments/assets/ecca7975-bc5f-42c1-93d4-43726166a158">
 
 
